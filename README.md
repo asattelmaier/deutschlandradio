@@ -1,4 +1,4 @@
-# Deutschlandfunk
+# Deutschlandradio
 
 ## Prerequirement
 * [gir1.2-appindicator3-0.1](https://packages.ubuntu.com/impish/gir1.2-appindicator3-0.1)

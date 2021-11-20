@@ -1,8 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, call
 
-from radio.channel import Channel
-from radio.radio import Radio
+from radio import Radio, Channel
 
 
 class TestRadio(unittest.TestCase):
@@ -35,14 +34,14 @@ class TestRadio(unittest.TestCase):
         audio_player = MagicMock()
         channel = MagicMock()
 
-        channel.value = "some-channel-value"
+        channel.value = 'some-channel-value'
         audio_player.is_playing = True
         radio = Radio.create(audio_player)
         radio.update_channel(channel)
 
         audio_player.set_uri.assert_has_calls([
             call(Channel.DEUTSCHLANDFUNK.value),
-            call("some-channel-value")
+            call('some-channel-value')
         ])
 
     def test_play_updated_channel(self):
@@ -52,7 +51,7 @@ class TestRadio(unittest.TestCase):
         audio_player = MagicMock()
         channel = MagicMock()
 
-        channel.value = "some-channel-value"
+        channel.value = 'some-channel-value'
         audio_player.is_playing = True
         radio = Radio.create(audio_player)
         radio.update_channel(channel)
@@ -67,7 +66,7 @@ class TestRadio(unittest.TestCase):
         audio_player = MagicMock()
         channel = MagicMock()
 
-        channel.value = "some-channel-value"
+        channel.value = 'some-channel-value'
         radio = Radio.create(audio_player)
         radio.update_channel(channel)
         audio_player.is_playing = True
@@ -83,7 +82,7 @@ class TestRadio(unittest.TestCase):
         audio_player = MagicMock()
         channel = MagicMock()
 
-        channel.value = "some-channel-value"
+        channel.value = 'some-channel-value'
         radio = Radio.create(audio_player)
         radio.update_channel(channel)
         audio_player.is_playing = False

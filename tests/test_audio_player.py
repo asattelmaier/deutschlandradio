@@ -1,7 +1,7 @@
 import unittest
-
-from audio_player.audio_player import AudioPlayer
 from unittest.mock import MagicMock
+
+from radio import AudioPlayer
 
 
 class TestAudioPlayer(unittest.TestCase):
@@ -40,7 +40,7 @@ class TestAudioPlayer(unittest.TestCase):
         audio_player = AudioPlayer.create(g_streamer)
         audio_player.play()
 
-        player.set_state.assert_called_once_with("PLAYING")
+        player.set_state.assert_called_once_with('PLAYING')
 
     def test_stop(self):
         """
@@ -54,7 +54,7 @@ class TestAudioPlayer(unittest.TestCase):
         audio_player = AudioPlayer.create(g_streamer)
         audio_player.stop()
 
-        player.set_state.assert_called_once_with("NULL")
+        player.set_state.assert_called_once_with('NULL')
 
     def test_is_playing(self):
         """
@@ -63,9 +63,9 @@ class TestAudioPlayer(unittest.TestCase):
         g_streamer = MagicMock()
         player = MagicMock()
 
-        g_streamer.State.PLAYING = "PLAYING"
+        g_streamer.State.PLAYING = 'PLAYING'
         g_streamer.ElementFactory.make.return_value = player
-        player.current_state = "PLAYING"
+        player.current_state = 'PLAYING'
         audio_player = AudioPlayer.create(g_streamer)
 
         self.assertTrue(audio_player.is_playing)
@@ -77,9 +77,9 @@ class TestAudioPlayer(unittest.TestCase):
         g_streamer = MagicMock()
         player = MagicMock()
 
-        g_streamer.State.PLAYING = "PLAYING"
+        g_streamer.State.PLAYING = 'PLAYING'
         g_streamer.ElementFactory.make.return_value = player
-        player.current_state = "NULL"
+        player.current_state = 'NULL'
         audio_player = AudioPlayer.create(g_streamer)
 
         self.assertFalse(audio_player.is_playing)

@@ -10,7 +10,13 @@ class AudioPlayer:
 
         return AudioPlayer(player, g_streamer.State)
 
-    def change_channel(self, uri):
+    @property
+    def is_playing(self):
+        current_state = self._player.current_state
+
+        return current_state is self._player_state.PLAYING
+
+    def set_uri(self, uri):
         self._player.set_property('uri', uri)
 
     def play(self):

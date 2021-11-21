@@ -1,13 +1,13 @@
 name: rundfunk
 base: core18
-version: '0.0.3'
+version: '0.0.4'
 summary: Unofficial Deutschlandradio GNU/Linux client
 description: |
   Unofficial Deutschlandradio GNU/Linux client for the Deutschlandradio channels, Deutschlandfunk, Deutschlandfunk
   Kultur, Deutschlandfunk Nova and Dokumente und Debatten.
 
 grade: devel
-confinement: devmode
+confinement: strict
 
 apps:
   rundfunk:

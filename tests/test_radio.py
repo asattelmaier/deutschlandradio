@@ -48,6 +48,32 @@ class TestRadio(unittest.TestCase):
             call('some-other-channel')
         ])
 
+    def test_change_channel_audio_player_call_order(self):
+        """
+        Test the audio player call order:
+          1. stop player
+          2. set new uri
+          3. start player
+        The order is important, otherwise the new
+        channel will not be played immediately after
+        channel switch.
+        """
+        audio_player = MagicMock()
+        channel = MagicMock()
+        other_channel = MagicMock()
+
+        channel.value = 'some-channel'
+        other_channel.value = 'some-other-channel'
+        audio_player.is_playing = True
+        radio = Radio.create(audio_player, channel)
+        radio.update_channel(other_channel)
+
+        audio_player.assert_has_calls([
+            call.stop(),
+            call.set_uri('some-other-channel'),
+            call.play()
+        ])
+
     def test_play_updated_channel(self):
         """
         Test that the updated channel will be played directly.

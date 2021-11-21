@@ -25,5 +25,6 @@ class Radio:
 
     def _change_channel(self, channel):
         self._current_channel = channel
+        self._audio_player.stop()
         self._audio_player.set_uri(channel.value)
         self._audio_player.play()

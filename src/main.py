@@ -14,7 +14,7 @@ from gi.repository import Gst as GStreamer
 
 def main():
     audio_player = AudioPlayer.create(GStreamer)
-    radio = Radio.create(audio_player)
+    radio = Radio.create(audio_player, Channel.DEUTSCHLANDFUNK)
     menu_builder = MenuBuilder.create(Gtk.Menu, Gtk.MenuItem)
     app_menu_factory = AppMenuFactory(menu_builder, radio, Channel, Gtk.main_quit)
     indicator = AppIndicator.Indicator.new(

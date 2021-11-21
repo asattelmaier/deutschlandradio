@@ -1,17 +1,10 @@
-from .channel import Channel
-
-
 class Radio:
-    _current_channel = Channel.DEUTSCHLANDFUNK
-
     def __init__(self, audio_player, current_channel):
         self._audio_player = audio_player
         self._current_channel = current_channel
 
     @staticmethod
-    def create(audio_player):
-        current_channel = Channel.DEUTSCHLANDFUNK
-
+    def create(audio_player, current_channel):
         audio_player.set_uri(current_channel.value)
 
         return Radio(audio_player, current_channel)

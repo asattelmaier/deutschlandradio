@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, call
 
-from radio import Radio, Channel
+from radio import Radio
 
 
 class TestRadio(unittest.TestCase):
@@ -10,22 +10,24 @@ class TestRadio(unittest.TestCase):
         Test that a Radio instance will be created.
         """
         audio_player = MagicMock()
+        channel = MagicMock()
 
-        radio = Radio.create(audio_player)
+        radio = Radio.create(audio_player, channel)
 
         self.assertIsInstance(radio, Radio)
 
-    def test_default_channel(self):
+    def test_current_channel(self):
         """
-        Test that "Deutschlandfunk" will be the default channel.
+        Test that the current channel will be set.
         """
         audio_player = MagicMock()
+        channel = MagicMock()
 
+        channel.value = 'some-channel'
         audio_player.is_playing = True
-        radio = Radio.create(audio_player)
-        radio.update_channel(Channel.DEUTSCHLANDFUNK)
+        Radio.create(audio_player, channel)
 
-        audio_player.stop.assert_called_once()
+        audio_player.set_uri.assert_called_once_with('some-channel')
 
     def test_change_channel(self):
         """
@@ -33,15 +35,17 @@ class TestRadio(unittest.TestCase):
         """
         audio_player = MagicMock()
         channel = MagicMock()
+        other_channel = MagicMock()
 
-        channel.value = 'some-channel-value'
+        channel.value = 'some-channel'
+        other_channel.value = 'some-other-channel'
         audio_player.is_playing = True
-        radio = Radio.create(audio_player)
-        radio.update_channel(channel)
+        radio = Radio.create(audio_player, channel)
+        radio.update_channel(other_channel)
 
         audio_player.set_uri.assert_has_calls([
-            call(Channel.DEUTSCHLANDFUNK.value),
-            call('some-channel-value')
+            call('some-channel'),
+            call('some-other-channel')
         ])
 
     def test_play_updated_channel(self):
@@ -50,11 +54,10 @@ class TestRadio(unittest.TestCase):
         """
         audio_player = MagicMock()
         channel = MagicMock()
+        other_channel = MagicMock()
 
-        channel.value = 'some-channel-value'
-        audio_player.is_playing = True
-        radio = Radio.create(audio_player)
-        radio.update_channel(channel)
+        radio = Radio.create(audio_player, channel)
+        radio.update_channel(other_channel)
 
         audio_player.play.assert_called_once()
 
@@ -66,9 +69,7 @@ class TestRadio(unittest.TestCase):
         audio_player = MagicMock()
         channel = MagicMock()
 
-        channel.value = 'some-channel-value'
-        radio = Radio.create(audio_player)
-        radio.update_channel(channel)
+        radio = Radio.create(audio_player, channel)
         audio_player.is_playing = True
         radio.update_channel(channel)
 
@@ -81,11 +82,11 @@ class TestRadio(unittest.TestCase):
         """
         audio_player = MagicMock()
         channel = MagicMock()
+        other_channel = MagicMock()
 
-        channel.value = 'some-channel-value'
-        radio = Radio.create(audio_player)
-        radio.update_channel(channel)
+        radio = Radio.create(audio_player, channel)
+        radio.update_channel(other_channel)
         audio_player.is_playing = False
-        radio.update_channel(channel)
+        radio.update_channel(other_channel)
 
         audio_player.play.assert_has_calls([call(), call()])

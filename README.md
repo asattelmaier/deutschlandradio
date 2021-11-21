@@ -1,7 +1,13 @@
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/rundfunk)
+
 # Rundfunk
 
 Unofficial Deutschlandradio GNU/Linux client for the Deutschlandradio channels, Deutschlandfunk, Deutschlandfunk Kultur,
 Deutschlandfunk Nova and Dokumente und Debatten.
+
+<p align="center">
+  <img src="https://drive.google.com/uc?export=view&id=1RpcYPeN7rZ04PpSK2FSs4HpuGf3cp_kR" alt="Rundfunk App">
+</p>
 
 ## Prerequirement
 

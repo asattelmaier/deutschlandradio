@@ -15,9 +15,10 @@ class TestAppMenuFactory(unittest.TestCase):
         quit_handler = MagicMock()
         menu = MagicMock()
 
-        app_menu_factory = AppMenuFactory(menu_builder, radio, channel, quit_handler)
         menu_builder.add_item.return_value = menu_builder
+        menu_builder.add_separator.return_value = menu_builder
         menu_builder.build.return_value = menu
+        app_menu_factory = AppMenuFactory(menu_builder, radio, channel, quit_handler)
 
         self.assertIs(app_menu_factory.create(), menu)
 
@@ -32,6 +33,7 @@ class TestAppMenuFactory(unittest.TestCase):
         quit_handler = MagicMock()
 
         menu_builder.add_item.return_value = menu_builder
+        menu_builder.add_separator.return_value = menu_builder
         app_menu_factory = AppMenuFactory(menu_builder, radio, channel, quit_handler)
         app_menu_factory.create()
 

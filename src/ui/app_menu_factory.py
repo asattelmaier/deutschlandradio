@@ -14,6 +14,7 @@ class AppMenuFactory:
             .add_item('Deutschlandfunk Kultur', self._create_deutschlandfunk_kultur_item_handler()) \
             .add_item('Deutschlandfunk Nova', self._create_deutschlandfunk_nova_item_handler()) \
             .add_item('Dokumente und Debatten', self._create_dokumente_und_debatten_item_handler()) \
+            .add_separator() \
             .add_item('Schließen', self._quit_handler) \
             .build()
 

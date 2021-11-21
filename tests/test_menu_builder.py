@@ -9,10 +9,9 @@ class TestMenuBuilder(unittest.TestCase):
         """
         Test that a MenuBuilder instance will be created.
         """
-        menu_factory = MagicMock()
-        item_factory = MagicMock()
+        gimp_toolkit = MagicMock()
 
-        menu_builder = MenuBuilder.create(menu_factory, item_factory)
+        menu_builder = MenuBuilder.create(gimp_toolkit)
 
         self.assertIsInstance(menu_builder, MenuBuilder)
 
@@ -20,12 +19,11 @@ class TestMenuBuilder(unittest.TestCase):
         """
         Test that an item will be added to the menu.
         """
-        menu_factory = MagicMock()
-        item_factory = MagicMock()
+        gimp_toolkit = MagicMock()
         item = MagicMock()
 
-        menu_builder = MenuBuilder.create(menu_factory, item_factory)
-        item_factory.return_value = item
+        menu_builder = MenuBuilder.create(gimp_toolkit)
+        gimp_toolkit.MenuItem.return_value = item
         menu = menu_builder \
             .add_item('some-label', lambda: 'test') \
             .build()
@@ -36,15 +34,34 @@ class TestMenuBuilder(unittest.TestCase):
         """
         Test that multiple items will be added to the menu.
         """
-        menu_factory = MagicMock()
-        item_factory = MagicMock()
+        gimp_toolkit = MagicMock()
         item = MagicMock()
 
-        menu_builder = MenuBuilder.create(menu_factory, item_factory)
-        item_factory.return_value = item
+        menu_builder = MenuBuilder.create(gimp_toolkit)
+        gimp_toolkit.MenuItem.return_value = item
         menu = menu_builder \
             .add_item('some-label', lambda: 'test') \
             .add_item('some-label', lambda: 'test') \
             .build()
 
         menu.append.assert_has_calls([call(item), call(item)])
+
+    def test_add_separator(self):
+        """
+        Test that a separator item will be added.
+        """
+        gimp_toolkit = MagicMock()
+        item = MagicMock()
+        separator = MagicMock()
+
+        gimp_toolkit.MenuItem.return_value = item
+        gimp_toolkit.SeparatorMenuItem.return_value = separator
+        menu_builder = MenuBuilder.create(gimp_toolkit)
+        menu = menu_builder \
+            .add_item('some-label', lambda: 'test') \
+            .add_separator() \
+            .add_item('some-label', lambda: 'test') \
+            .build()
+
+        menu.append.assert_has_calls([call(item), call(separator), call(item)])
+

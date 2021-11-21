@@ -1,0 +1,38 @@
+name: deutschlandradio
+base: core18
+version: '0.0.1'
+summary: Unofficial Deutschlandradio GNU/Linux client
+description: |
+  Unofficial Deutschlandradio GNU/Linux client for the Deutschlandradio channels, Deutschlandfunk, Deutschlandfunk
+  Kultur, Deutschlandfunk Nova and Dokumente und Debatten.
+
+
+
+grade: devel
+confinement: devmode
+
+apps:
+  deutschlandradio:
+    command: python3 $SNAP/main.py
+    extensions: [ gnome-3-28 ]
+    plugs:
+      - audio-playback
+      - network
+      - pulseaudio
+
+parts:
+  copy-src:
+    plugin: dump
+    source: ./src
+  deutschlandradio:
+    plugin: python
+    python-version: python3
+    source: ./src
+    stage-packages:
+      - python3-gst-1.0
+      - gir1.2-appindicator3-0.1
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
+      - libgpm2
+      - libslang2

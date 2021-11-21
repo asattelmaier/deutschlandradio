@@ -1,4 +1,4 @@
-from radio.channel import Channel
+from .channel import Channel
 
 
 class Radio:

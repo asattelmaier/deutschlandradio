@@ -11,7 +11,8 @@ from gi.repository import Gtk
 from gi.repository import AppIndicator3 as AppIndicator
 from gi.repository import Gst as GStreamer
 
-if __name__ == "__main__":
+
+def main():
     audio_player = AudioPlayer.create(GStreamer)
     radio = Radio.create(audio_player)
     menu_builder = MenuBuilder.create(Gtk.Menu, Gtk.MenuItem)
@@ -25,3 +26,7 @@ if __name__ == "__main__":
     indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
     indicator.set_menu(app_menu_factory.create())
     Gtk.main()
+
+
+if __name__ == "__main__":
+    main()

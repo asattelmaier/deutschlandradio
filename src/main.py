@@ -1,7 +1,7 @@
 import gi
 
 from radio import Radio, Channel, AudioPlayer
-from ui import AppMenuFactory, MenuBuilder
+from gui import AppMenuFactory, MenuBuilder
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gst', '1.0')

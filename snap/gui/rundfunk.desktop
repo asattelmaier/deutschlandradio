@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Rundfunk
+GenericName=Unofficial Deutschlandradio client
+Comment=Unofficial Deutschlandradio GNU/Linux client
+Exec=rundfunk
+Icon=${SNAP}/meta/gui/rundfunk.png
+Terminal=false
+Type=Application
+Categories=Music and Audio;
+StartupNotify=false

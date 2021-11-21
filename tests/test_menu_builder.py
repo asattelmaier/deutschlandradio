@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, call
 
-from src.ui import MenuBuilder
+from src.gui import MenuBuilder
 
 
 class TestMenuBuilder(unittest.TestCase):

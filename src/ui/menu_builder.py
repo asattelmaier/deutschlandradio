@@ -37,7 +37,8 @@ class MenuBuilder:
     @staticmethod
     def _disable_items(items):
         for item in items:
-            item.set_active(False)
+            if item.get_active():
+                item.set_active(False)
 
     def _is_menu_item(self, item):
         return isinstance(item, self._gimp_toolkit.CheckMenuItem)
@@ -53,7 +54,8 @@ class MenuBuilder:
         if item.get_active():
             items = self._filter_menu_item(item)
             MenuBuilder._disable_items(items)
-            handler()
+
+        handler()
 
     def _filter_menu_item(self, item_to_filter):
         return filter(lambda item: item is not item_to_filter, self._menu_items)

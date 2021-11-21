@@ -13,6 +13,9 @@ apps:
   rundfunk:
     command: python3 $SNAP/main.py
     extensions: [ gnome-3-28 ]
+    plugs:
+      - audio-playback
+      - network
 
 parts:
   copy-src:

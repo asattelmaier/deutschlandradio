@@ -31,4 +31,4 @@ class AppMenuFactory:
         return self._create_channel_item_handler(self._channel.DOKUMENTE_UND_DEBATTEN)
 
     def _create_channel_item_handler(self, channel):
-        return lambda _: self._radio.update_channel(channel)
+        return lambda: self._radio.update_channel(channel)

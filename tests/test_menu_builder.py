@@ -23,7 +23,7 @@ class TestMenuBuilder(unittest.TestCase):
         item = MagicMock()
 
         menu_builder = MenuBuilder.create(gimp_toolkit)
-        gimp_toolkit.MenuItem.return_value = item
+        gimp_toolkit.CheckMenuItem.return_value = item
         menu = menu_builder \
             .add_item('some-label', lambda: 'test') \
             .build()
@@ -38,7 +38,7 @@ class TestMenuBuilder(unittest.TestCase):
         item = MagicMock()
 
         menu_builder = MenuBuilder.create(gimp_toolkit)
-        gimp_toolkit.MenuItem.return_value = item
+        gimp_toolkit.CheckMenuItem.return_value = item
         menu = menu_builder \
             .add_item('some-label', lambda: 'test') \
             .add_item('some-label', lambda: 'test') \
@@ -54,7 +54,7 @@ class TestMenuBuilder(unittest.TestCase):
         item = MagicMock()
         separator = MagicMock()
 
-        gimp_toolkit.MenuItem.return_value = item
+        gimp_toolkit.CheckMenuItem.return_value = item
         gimp_toolkit.SeparatorMenuItem.return_value = separator
         menu_builder = MenuBuilder.create(gimp_toolkit)
         menu = menu_builder \
@@ -64,4 +64,3 @@ class TestMenuBuilder(unittest.TestCase):
             .build()
 
         menu.append.assert_has_calls([call(item), call(separator), call(item)])
-

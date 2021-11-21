@@ -1,4 +1,4 @@
-# Deutschlandradio Client
+# Rundfunk
 
 Unofficial Deutschlandradio GNU/Linux client for the Deutschlandradio channels, Deutschlandfunk, Deutschlandfunk Kultur,
 Deutschlandfunk Nova and Dokumente und Debatten.
@@ -25,5 +25,5 @@ snap install --devmode *.snap
 ## Run
 
 ```bash
-deutschlandradio
+rundfunk
 ```

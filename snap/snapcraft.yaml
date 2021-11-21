@@ -1,4 +1,4 @@
-name: deutschlandradio
+name: rundfunk
 base: core18
 version: '0.0.1'
 summary: Unofficial Deutschlandradio GNU/Linux client
@@ -6,13 +6,11 @@ description: |
   Unofficial Deutschlandradio GNU/Linux client for the Deutschlandradio channels, Deutschlandfunk, Deutschlandfunk
   Kultur, Deutschlandfunk Nova and Dokumente und Debatten.
 
-
-
 grade: devel
 confinement: devmode
 
 apps:
-  deutschlandradio:
+  rundfunk:
     command: python3 $SNAP/main.py
     extensions: [ gnome-3-28 ]
     plugs:
@@ -24,7 +22,7 @@ parts:
   copy-src:
     plugin: dump
     source: ./src
-  deutschlandradio:
+  rundfunk:
     plugin: python
     python-version: python3
     source: ./src

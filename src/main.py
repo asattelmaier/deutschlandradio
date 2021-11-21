@@ -18,7 +18,7 @@ def main():
     menu_builder = MenuBuilder.create(Gtk.Menu, Gtk.MenuItem)
     app_menu_factory = AppMenuFactory(menu_builder, radio, Channel, Gtk.main_quit)
     indicator = AppIndicator.Indicator.new(
-        'deutschlandradio_app_indicator_id',
+        'rundfunk_app_indicator_id',
         'gtk-media-play',
         AppIndicator.IndicatorCategory.APPLICATION_STATUS
     )

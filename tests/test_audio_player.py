@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from radio import AudioPlayer
+from src.radio import AudioPlayer
 
 
 class TestAudioPlayer(unittest.TestCase):

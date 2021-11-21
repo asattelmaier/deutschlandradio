@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, call, ANY
 
-from ui import AppMenuFactory
+from src.ui import AppMenuFactory
 
 
 class TestAppMenuFactory(unittest.TestCase):

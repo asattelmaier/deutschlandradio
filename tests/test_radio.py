@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, call
 
-from radio import Radio
+from src.radio import Radio
 
 
 class TestRadio(unittest.TestCase):

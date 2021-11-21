@@ -27,3 +27,12 @@ snap install --devmode *.snap
 ```bash
 rundfunk
 ```
+
+## Publish
+
+```bash
+# Login
+snapcraft login
+# push
+snapcraft push rundfunk_<version>_<arch>.snap
+```

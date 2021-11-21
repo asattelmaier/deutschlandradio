@@ -49,12 +49,11 @@ class MenuBuilder:
         return lambda item: self._item_handler(item, handler)
 
     def _item_handler(self, item, handler):
-        handler()
-
         # TODO: Move this logic to make it simple testable
         if item.get_active():
             items = self._filter_menu_item(item)
             MenuBuilder._disable_items(items)
+            handler()
 
     def _filter_menu_item(self, item_to_filter):
         return filter(lambda item: item is not item_to_filter, self._menu_items)

@@ -56,7 +56,7 @@ class TestAudioPlayer(unittest.TestCase):
 
         player.set_state.assert_called_once_with('NULL')
 
-    def test_is_playing(self):
+    def test_is_playing_on_playing_state(self):
         """
         Test is playing, if the current state equals "PLAYING".
         """
@@ -66,6 +66,20 @@ class TestAudioPlayer(unittest.TestCase):
         g_streamer.State.PLAYING = 'PLAYING'
         g_streamer.ElementFactory.make.return_value = player
         player.current_state = 'PLAYING'
+        audio_player = AudioPlayer.create(g_streamer)
+
+        self.assertTrue(audio_player.is_playing)
+
+    def test_is_playing_on_ready_state(self):
+        """
+        Test is playing, if the current state equals "READY".
+        """
+        g_streamer = MagicMock()
+        player = MagicMock()
+
+        g_streamer.State.READY = 'READY'
+        g_streamer.ElementFactory.make.return_value = player
+        player.current_state = 'READY'
         audio_player = AudioPlayer.create(g_streamer)
 
         self.assertTrue(audio_player.is_playing)

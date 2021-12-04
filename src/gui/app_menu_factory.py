@@ -1,7 +1,10 @@
+from src.radio import UpdateChannel
+
+
 class AppMenuFactory:
-    def __init__(self, menu_builder, radio, channel, quit_handler):
+    def __init__(self, menu_builder, event_bus, channel, quit_handler):
         self._menu_builder = menu_builder
-        self._radio = radio
+        self._event_bus = event_bus
         self._channel = channel
         self._quit_handler = quit_handler
 
@@ -31,4 +34,4 @@ class AppMenuFactory:
         return self._create_channel_item_handler(self._channel.DOKUMENTE_UND_DEBATTEN)
 
     def _create_channel_item_handler(self, channel):
-        return lambda: self._radio.update_channel(channel)
+        return lambda: self._event_bus.publish(UpdateChannel(channel))

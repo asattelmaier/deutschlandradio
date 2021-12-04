@@ -1,31 +1,23 @@
 import unittest
-from unittest.mock import MagicMock, call
+from unittest.mock import MagicMock
 
-from src.radio import Radio
+from src.radio import Radio, Stop, Play, ChangeChannel
+from src.radio.subscriptions import OnUpdateChannel
+from tests.mocks.event_bus_mock import EventBusMock
 
 
 class TestRadio(unittest.TestCase):
-    def test_creation(self):
-        """
-        Test that a Radio instance will be created.
-        """
-        audio_player = MagicMock()
-        channel = MagicMock()
-
-        radio = Radio.create(audio_player, channel)
-
-        self.assertIsInstance(radio, Radio)
-
     def test_current_channel(self):
         """
         Test that the current channel will be set.
         """
         audio_player = MagicMock()
+        event_bus = MagicMock()
         channel = MagicMock()
 
         channel.value = 'some-channel'
         audio_player.is_playing = True
-        Radio.create(audio_player, channel)
+        Radio.init(audio_player, event_bus, channel)
 
         audio_player.set_uri.assert_called_once_with('some-channel')
 
@@ -34,19 +26,20 @@ class TestRadio(unittest.TestCase):
         Test that the channel will be changed.
         """
         audio_player = MagicMock()
+        event_bus = EventBusMock()
         channel = MagicMock()
-        other_channel = MagicMock()
+        update_channel_event = MagicMock()
 
         channel.value = 'some-channel'
-        other_channel.value = 'some-other-channel'
+        update_channel_event.channel.value = 'some-other-channel'
         audio_player.is_playing = True
-        radio = Radio.create(audio_player, channel)
-        radio.update_channel(other_channel)
+        Radio.init(audio_player, event_bus, channel)
+        event = event_bus \
+            .get_subscription(OnUpdateChannel) \
+            .notify(update_channel_event) \
+            .get_event(ChangeChannel)
 
-        audio_player.set_uri.assert_has_calls([
-            call('some-channel'),
-            call('some-other-channel')
-        ])
+        self.assertIs(event.channel, update_channel_event.channel)
 
     def test_change_channel_audio_player_call_order(self):
         """
@@ -59,33 +52,39 @@ class TestRadio(unittest.TestCase):
         channel switch.
         """
         audio_player = MagicMock()
+        event_bus = EventBusMock()
         channel = MagicMock()
-        other_channel = MagicMock()
+        update_channel_event = MagicMock()
 
         channel.value = 'some-channel'
-        other_channel.value = 'some-other-channel'
+        update_channel_event.channel.value = 'some-other-channel'
         audio_player.is_playing = True
-        radio = Radio.create(audio_player, channel)
-        radio.update_channel(other_channel)
+        Radio.init(audio_player, event_bus, channel)
+        events = event_bus \
+            .get_subscription(OnUpdateChannel) \
+            .notify(update_channel_event) \
+            .events
 
-        audio_player.assert_has_calls([
-            call.stop(),
-            call.set_uri('some-other-channel'),
-            call.play()
-        ])
+        self.assertIsInstance(events[0], Stop)
+        self.assertIsInstance(events[1], ChangeChannel)
+        self.assertIsInstance(events[2], Play)
 
     def test_play_updated_channel(self):
         """
         Test that the updated channel will be played directly.
         """
         audio_player = MagicMock()
+        event_bus = EventBusMock()
         channel = MagicMock()
-        other_channel = MagicMock()
+        update_channel_event = MagicMock()
 
-        radio = Radio.create(audio_player, channel)
-        radio.update_channel(other_channel)
+        Radio.init(audio_player, event_bus, channel)
+        events = event_bus \
+            .get_subscription(OnUpdateChannel) \
+            .notify(update_channel_event) \
+            .events
 
-        audio_player.play.assert_called_once()
+        self.assertIsInstance(events[2], Play)
 
     def test_stop_player(self):
         """
@@ -93,26 +92,15 @@ class TestRadio(unittest.TestCase):
         channel is already playing.
         """
         audio_player = MagicMock()
+        event_bus = EventBusMock()
         channel = MagicMock()
+        update_channel_event = MagicMock()
 
-        radio = Radio.create(audio_player, channel)
+        Radio.init(audio_player, event_bus, channel)
         audio_player.is_playing = True
-        radio.update_channel(channel)
+        events = event_bus \
+            .get_subscription(OnUpdateChannel) \
+            .notify(update_channel_event) \
+            .events
 
-        audio_player.stop.assert_called_once()
-
-    def test_play_player(self):
-        """
-        Test that the player will be played if the provided
-        channel is stopped.
-        """
-        audio_player = MagicMock()
-        channel = MagicMock()
-        other_channel = MagicMock()
-
-        radio = Radio.create(audio_player, channel)
-        radio.update_channel(other_channel)
-        audio_player.is_playing = False
-        radio.update_channel(other_channel)
-
-        audio_player.play.assert_has_calls([call(), call()])
+        self.assertIsInstance(events[0], Stop)

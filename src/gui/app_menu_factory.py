@@ -1,4 +1,5 @@
 from src.radio import UpdateChannel
+from .menu_item_label import MenuItemLabel
 
 
 class AppMenuFactory:
@@ -13,12 +14,12 @@ class AppMenuFactory:
 
     def _build_menu(self):
         return self._menu_builder \
-            .add_item('Deutschlandfunk', self._create_deutschlandfunk_item_handler()) \
-            .add_item('Deutschlandfunk Kultur', self._create_deutschlandfunk_kultur_item_handler()) \
-            .add_item('Deutschlandfunk Nova', self._create_deutschlandfunk_nova_item_handler()) \
-            .add_item('Dokumente und Debatten', self._create_dokumente_und_debatten_item_handler()) \
+            .add_item(MenuItemLabel.DEUTSCHLANDFUNK.value, self._create_deutschlandfunk_item_handler()) \
+            .add_item(MenuItemLabel.DEUTSCHLANDFUNK_KULTUR.value, self._create_deutschlandfunk_kultur_item_handler()) \
+            .add_item(MenuItemLabel.DEUTSCHLANDFUNK_NOVA.value, self._create_deutschlandfunk_nova_item_handler()) \
+            .add_item(MenuItemLabel.DOKUMENTE_UND_DEBATTEN.value, self._create_dokumente_und_debatten_item_handler()) \
             .add_separator() \
-            .add_item('Schließen', self._quit_handler) \
+            .add_item(MenuItemLabel.QUIT.value, self._quit_handler) \
             .build()
 
     def _create_deutschlandfunk_item_handler(self):

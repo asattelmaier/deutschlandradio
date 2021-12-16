@@ -8,3 +8,5 @@ from gi.repository import Gtk as GimpToolkit
 from gi.repository import AppIndicator3 as AppIndicator
 from gi.repository import Gst as GStreamer
 from gi.repository.Gst import State
+from gi.overrides.Gtk import Menu
+from gi.repository.Gtk import CheckMenuItem

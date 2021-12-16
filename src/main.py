@@ -1,15 +1,16 @@
 from __future__ import annotations
-from radio import Radio, Channel, AudioPlayer
-from gui import AppMenuFactory, MenuBuilder
 from g_object import GStreamer, GimpToolkit, AppIndicator
 from event_bus import EventBus
+from gui import AppMenuFactory, MenuBuilder, MenuHandler
+from radio import Radio, Channel, AudioPlayer
 
 
 def main() -> None:
     event_bus = EventBus()
     audio_player = AudioPlayer.create(GStreamer)
     Radio.init(audio_player, event_bus, Channel.DEUTSCHLANDFUNK)
-    menu_builder = MenuBuilder.create(GimpToolkit)
+    menu_handler = MenuHandler(event_bus)
+    menu_builder = MenuBuilder.create(GimpToolkit, menu_handler)
     app_menu_factory = AppMenuFactory(menu_builder, event_bus, Channel, GimpToolkit.main_quit)
     indicator = AppIndicator.Indicator.new(
         'rundfunk_app_indicator_id',

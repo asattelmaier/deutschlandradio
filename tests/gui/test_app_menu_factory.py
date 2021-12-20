@@ -1,6 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, call, ANY
-
+from unittest.mock import MagicMock, call
 from src.gui import AppMenuFactory
 
 
@@ -38,9 +37,9 @@ class TestAppMenuFactory(unittest.TestCase):
         app_menu_factory.create()
 
         menu_builder.add_item.assert_has_calls([
-            call('Deutschlandfunk', ANY),
-            call('Deutschlandfunk Kultur', ANY),
-            call('Deutschlandfunk Nova', ANY),
-            call('Dokumente und Debatten', ANY),
-            call('Schließen', ANY)
+            call('Deutschlandfunk'),
+            call('Deutschlandfunk Kultur'),
+            call('Deutschlandfunk Nova'),
+            call('Dokumente und Debatten'),
+            call('Schließen')
         ])

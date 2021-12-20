@@ -16,12 +16,12 @@ class MenuBuilder:
 
         return MenuBuilder(gimp_toolkit, menu, menu_handler)
 
-    def add_item(self, label, handler):
+    def add_item(self, label):
         item = self._gimp_toolkit.CheckMenuItem(label)
 
         item.set_draw_as_radio(True)
-        item.connect('activate', self._menu_handler.create_item_handler(handler))
-        self._menu_handler.add_item(item, handler)
+        item.connect('activate', self._menu_handler.item_handler)
+        self._menu_handler.add_item(item)
         self._add_to_menu(item)
 
         return self

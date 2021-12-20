@@ -27,7 +27,7 @@ class TestMenuBuilder(unittest.TestCase):
         menu_builder = MenuBuilder.create(gimp_toolkit, menu_handler)
         gimp_toolkit.CheckMenuItem.return_value = item
         menu = menu_builder \
-            .add_item('some-label', lambda: 'test') \
+            .add_item('some-label') \
             .build()
 
         menu.append.assert_has_calls([call(item)])
@@ -43,8 +43,8 @@ class TestMenuBuilder(unittest.TestCase):
         menu_builder = MenuBuilder.create(gimp_toolkit, menu_handler)
         gimp_toolkit.CheckMenuItem.return_value = item
         menu = menu_builder \
-            .add_item('some-label', lambda: 'test') \
-            .add_item('some-label', lambda: 'test') \
+            .add_item('some-label') \
+            .add_item('some-label') \
             .build()
 
         menu.append.assert_has_calls([call(item), call(item)])
@@ -62,9 +62,9 @@ class TestMenuBuilder(unittest.TestCase):
         gimp_toolkit.SeparatorMenuItem.return_value = separator
         menu_builder = MenuBuilder.create(gimp_toolkit, menu_handler)
         menu = menu_builder \
-            .add_item('some-label', lambda: 'test') \
+            .add_item('some-label') \
             .add_separator() \
-            .add_item('some-label', lambda: 'test') \
+            .add_item('some-label') \
             .build()
 
         menu.append.assert_has_calls([call(item), call(separator), call(item)])

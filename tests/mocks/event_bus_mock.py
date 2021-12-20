@@ -1,10 +1,13 @@
+from typing import Any
 from unittest.mock import MagicMock
 
 
 class EventBusMock(MagicMock):
-    _subscription = None
-    _subscriptions = []
-    _events = []
+    def __init__(self, *args: Any, **kw: Any):
+        super().__init__(*args, **kw)
+        self._subscriptions = []
+        self._events = []
+        self._subscription = None
 
     @property
     def events(self):

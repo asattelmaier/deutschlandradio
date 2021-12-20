@@ -22,7 +22,7 @@ class TestMprisAdapter(unittest.TestCase):
             .get_subscription(OnPlay) \
             .notify(event)
 
-        event_adapter.on_playpause.assert_called()
+        event_adapter.on_player_all.assert_called()
 
     def test_playstate_on_play_subscription(self):
         """
@@ -78,7 +78,7 @@ class TestMprisAdapter(unittest.TestCase):
             .get_subscription(OnStop) \
             .notify(event)
 
-        event_adapter.on_playpause.assert_called()
+        event_adapter.on_player_all.assert_called()
 
     def test_playstate_on_stop_subscription(self):
         """

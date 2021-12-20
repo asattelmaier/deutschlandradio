@@ -1,19 +1,22 @@
 from __future__ import annotations
+from typing import Callable
 from src.event_bus import EventBus
 from src.radio import Channel, OnPlay, Play, OnStop, Stop
 from src.g_object import CheckMenuItem
+from .label_channel_map import labelChannelMap
 from .menu_item import MenuItem
 from .menu_item_label import MenuItemLabel
 
 
 class MenuHandler:
-    def __init__(self, event_bus: EventBus):
+    def __init__(self, event_bus: EventBus, quit_handler: Callable):
         self._items: [MenuItem] = []
         self._event_bus: EventBus = event_bus
+        self._quit_handler: Callable = quit_handler
 
     @staticmethod
-    def create(event_bus: EventBus) -> MenuHandler:
-        menu_handler = MenuHandler(event_bus)
+    def create(event_bus: EventBus, quit_handler: Callable) -> MenuHandler:
+        menu_handler = MenuHandler(event_bus, quit_handler)
 
         event_bus.subscribe(OnPlay(menu_handler._activate_item))
         event_bus.subscribe(OnStop(menu_handler._disable_item))
@@ -21,21 +24,15 @@ class MenuHandler:
         return menu_handler
 
     def add_item(self, item: CheckMenuItem) -> None:
-        label = item.get_label()
-
-        if label == MenuItemLabel.DEUTSCHLANDFUNK.value:
-            return self._items.append(MenuItem(item, Channel.DEUTSCHLANDFUNK))
-        if label == MenuItemLabel.DEUTSCHLANDFUNK_KULTUR.value:
-            return self._items.append(MenuItem(item, Channel.DEUTSCHLANDFUNK_KULTUR))
-        if label == MenuItemLabel.DEUTSCHLANDFUNK_NOVA.value:
-            return self._items.append(MenuItem(item, Channel.DEUTSCHLANDFUNK_NOVA))
-        if label == MenuItemLabel.DOKUMENTE_UND_DEBATTEN.value:
-            return self._items.append(MenuItem(item, Channel.DOKUMENTE_UND_DEBATTEN))
-        if label == MenuItemLabel.QUIT.value:
-            return self._items.append(MenuItem(item, Channel.EMPTY))
+        return self._items.append(MenuItem(item, labelChannelMap[item.get_label()]))
 
     def item_handler(self, item: CheckMenuItem) -> None:
-        self._item_handler(self._get_item_by_label(item.get_label()))
+        label = item.get_label()
+
+        if label == MenuItemLabel.QUIT.value:
+            return self._quit_handler()
+
+        self._item_handler(self._get_item_by_label(label))
 
     @staticmethod
     def _disable_items(items: [MenuItem]) -> None:

@@ -12,7 +12,8 @@ class TestMenuHandler(unittest.TestCase):
         """
         item = MagicMock()
         event_bus = EventBusMock()
-        menu_handler = MenuHandler.create(event_bus)
+        quit_handler = MagicMock()
+        menu_handler = MenuHandler.create(event_bus, quit_handler)
 
         item.get_label.return_value = 'Deutschlandfunk'
         item.get_active.return_value = True
@@ -28,7 +29,8 @@ class TestMenuHandler(unittest.TestCase):
         """
         item = MagicMock()
         event_bus = EventBusMock()
-        menu_handler = MenuHandler.create(event_bus)
+        quit_handler = MagicMock()
+        menu_handler = MenuHandler.create(event_bus, quit_handler)
 
         item.get_label.return_value = 'Deutschlandfunk'
         item.get_active.return_value = False

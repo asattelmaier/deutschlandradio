@@ -2,11 +2,10 @@ from .menu_item_label import MenuItemLabel
 
 
 class AppMenuFactory:
-    def __init__(self, menu_builder, event_bus, channel, quit_handler):
+    def __init__(self, menu_builder, event_bus, channel):
         self._menu_builder = menu_builder
         self._event_bus = event_bus
         self._channel = channel
-        self._quit_handler = quit_handler
 
     def create(self):
         return self._build_menu()

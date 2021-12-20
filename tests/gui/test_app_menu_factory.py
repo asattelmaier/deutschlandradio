@@ -11,13 +11,12 @@ class TestAppMenuFactory(unittest.TestCase):
         menu_builder = MagicMock()
         radio = MagicMock()
         channel = MagicMock()
-        quit_handler = MagicMock()
         menu = MagicMock()
 
         menu_builder.add_item.return_value = menu_builder
         menu_builder.add_separator.return_value = menu_builder
         menu_builder.build.return_value = menu
-        app_menu_factory = AppMenuFactory(menu_builder, radio, channel, quit_handler)
+        app_menu_factory = AppMenuFactory(menu_builder, radio, channel)
 
         self.assertIs(app_menu_factory.create(), menu)
 
@@ -29,11 +28,10 @@ class TestAppMenuFactory(unittest.TestCase):
         menu_builder = MagicMock()
         radio = MagicMock()
         channel = MagicMock()
-        quit_handler = MagicMock()
 
         menu_builder.add_item.return_value = menu_builder
         menu_builder.add_separator.return_value = menu_builder
-        app_menu_factory = AppMenuFactory(menu_builder, radio, channel, quit_handler)
+        app_menu_factory = AppMenuFactory(menu_builder, radio, channel)
         app_menu_factory.create()
 
         menu_builder.add_item.assert_has_calls([

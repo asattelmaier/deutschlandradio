@@ -1,6 +1,7 @@
 from __future__ import annotations
 from src.event_bus import EventBus
 from src.radio import Stop, Play, Channel, OnPlay, OnStop
+from .channel_order_map import ChannelOrderMap
 from .mpris_server import MprisAdapterInterface, PlayState, Metadata, MetadataObj, EventAdapter
 from ..menu_item import MenuItemLabelChannelMap
 
@@ -35,17 +36,33 @@ class MprisAdapter(MprisAdapterInterface):
     def can_play(self) -> bool:
         return True
 
+    def play(self):
+        self._event_bus.publish(Play(self._current_channel))
+
     def can_pause(self) -> bool:
         return True
-
-    def get_current_position(self):
-        return 0
 
     def pause(self):
         self._event_bus.publish(Stop(self._current_channel))
 
-    def play(self):
-        self._event_bus.publish(Play(self._current_channel))
+    def can_go_next(self) -> bool:
+        return True
+
+    def next(self) -> None:
+        channel = ChannelOrderMap.next(self._current_channel)
+
+        self._event_bus.publish(Play(channel))
+
+    def can_go_previous(self) -> bool:
+        return True
+
+    def previous(self) -> None:
+        channel = ChannelOrderMap.previous(self._current_channel)
+
+        self._event_bus.publish(Play(channel))
+
+    def get_current_position(self):
+        return 0
 
     def get_playstate(self):
         if self._is_playing:

@@ -3,9 +3,7 @@ from typing import Callable
 from src.event_bus import EventBus
 from src.radio import Channel, OnPlay, Play, OnStop, Stop
 from src.g_object import CheckMenuItem
-from .label_channel_map import labelChannelMap
-from .menu_item import MenuItem
-from .menu_item_label import MenuItemLabel
+from .menu_item import MenuItemLabel, MenuItem, MenuItemLabelChannelMap
 
 
 class MenuHandler:
@@ -24,7 +22,9 @@ class MenuHandler:
         return menu_handler
 
     def add_item(self, item: CheckMenuItem) -> None:
-        return self._items.append(MenuItem(item, labelChannelMap[item.get_label()]))
+        channel = MenuItemLabelChannelMap.get_channel(item.get_label())
+
+        return self._items.append(MenuItem(item, channel))
 
     def item_handler(self, item: CheckMenuItem) -> None:
         label = item.get_label()

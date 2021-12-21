@@ -1,8 +1,8 @@
 from __future__ import annotations
 from src.event_bus import EventBus
 from src.radio import Stop, Play, Channel, OnPlay, OnStop
-from src.gui.mpris.channel_label_map import channelLabelMap
 from .mpris_server import MprisAdapterInterface, PlayState, Metadata, MetadataObj, EventAdapter
+from ..menu_item import MenuItemLabelChannelMap
 
 
 class MprisAdapter(MprisAdapterInterface):
@@ -54,9 +54,11 @@ class MprisAdapter(MprisAdapterInterface):
         return PlayState.STOPPED
 
     def metadata(self) -> Metadata:
+        label = MenuItemLabelChannelMap.get_label(self._current_channel)
+
         return MetadataObj(
             url=[self._TITLE],
-            length=channelLabelMap[self._current_channel.value],
+            length=label,
         )
 
     def _update_state(self, is_playing: bool, channel: Channel):

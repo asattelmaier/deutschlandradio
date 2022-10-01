@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Callable
 from src.event_bus import EventBus
 from src.radio import Channel, OnPlay, Play, OnStop, Stop
@@ -13,7 +12,7 @@ class MenuHandler:
         self._quit_handler: Callable = quit_handler
 
     @staticmethod
-    def create(event_bus: EventBus, quit_handler: Callable) -> MenuHandler:
+    def create(event_bus: EventBus, quit_handler: Callable):
         menu_handler = MenuHandler(event_bus, quit_handler)
 
         event_bus.subscribe(OnPlay(menu_handler._activate_item))

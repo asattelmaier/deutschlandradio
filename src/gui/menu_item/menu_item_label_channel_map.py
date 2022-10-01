@@ -1,4 +1,3 @@
-from __future__ import annotations
 from src.radio import Channel
 from .menu_item_label import MenuItemLabel
 

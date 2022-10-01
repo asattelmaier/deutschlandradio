@@ -1,5 +1,3 @@
-from __future__ import annotations
-from typing import Type
 from src.g_object import GStreamer, State
 from .playbin import Playbin
 
@@ -10,7 +8,7 @@ class AudioPlayer:
         self._player_state = player_state
 
     @staticmethod
-    def create(g_streamer: Type[GStreamer]) -> AudioPlayer:
+    def create(g_streamer):
         g_streamer.init(None)
         player = g_streamer.ElementFactory.make("playbin", "player")
 

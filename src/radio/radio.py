@@ -1,4 +1,3 @@
-from __future__ import annotations
 from src.event_bus import EventBus
 from .channel import Channel
 from .audio_player import AudioPlayer

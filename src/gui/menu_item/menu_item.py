@@ -1,4 +1,3 @@
-from __future__ import annotations
 from src.g_object import CheckMenuItem
 from src.radio import Channel
 

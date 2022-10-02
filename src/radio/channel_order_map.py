@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from src.radio import Channel
+from .radio import Channel
 
 
 class ChannelOrderMap:

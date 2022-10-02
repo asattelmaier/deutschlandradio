@@ -1,6 +1,10 @@
+from typing import Callable
 from src.event_bus import Subscription
 from src.radio.events import Play
 
 
 class OnPlay(Subscription):
     event_name: str = Play.name
+
+    def __init__(self, handler: Callable[[Play], None]):
+        super().__init__(handler)

@@ -16,6 +16,6 @@ class TestRadio(unittest.TestCase):
 
         channel.value = 'some-channel'
         audio_player.is_playing = True
-        Radio.init(audio_player, event_bus, channel)
+        Radio.create(audio_player, event_bus, channel)
 
         audio_player.set_uri.assert_called_once_with('some-channel')

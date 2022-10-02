@@ -1,6 +1,7 @@
 from src.event_bus import EventBus
 from .channel import Channel
 from .audio_player import AudioPlayer
+from .channel_order_map import ChannelOrderMap
 from .events import Stop, Play
 from .subscriptions import OnPlay, OnStop
 
@@ -13,13 +14,29 @@ class Radio:
         self._event_bus = event_bus
 
     @staticmethod
-    def init(audio_player: AudioPlayer, event_bus: EventBus, current_channel: Channel) -> None:
+    def create(audio_player: AudioPlayer, event_bus: EventBus, current_channel: Channel):
         radio = Radio(audio_player, event_bus)
 
         radio._set_channel(current_channel)
 
         event_bus.subscribe(OnPlay(radio._on_play))
         event_bus.subscribe(OnStop(radio._on_stop))
+
+        return radio
+
+    @property
+    def is_playing(self) -> bool:
+        return self._audio_player.is_playing
+
+    @property
+    def current_channel(self) -> Channel:
+        return self._current_channel
+
+    def next(self):
+        self._event_bus.publish(Play(ChannelOrderMap.next(self.current_channel)))
+
+    def previous(self):
+        self._event_bus.publish(Play(ChannelOrderMap.previous(self.current_channel)))
 
     def _on_play(self, event: Play) -> None:
         if event.channel.value == self._current_channel.value:

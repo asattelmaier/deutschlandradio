@@ -1,8 +1,9 @@
 from typing import Optional
+
 from pydbus import SessionBus
 from pydbus.publication import Publication
+
 from src.event_bus import EventBus
-from src.radio import Radio
 from .player import MprisPlayer
 
 
@@ -11,9 +12,9 @@ class MprisMediaPlayer:
     _DBUS_PATH: str = '/org/mpris/MediaPlayer2'
     _publication_token: Optional[Publication] = None
 
-    def __init__(self, app_name: str, radio: Radio, event_bus: EventBus) -> None:
+    def __init__(self, app_name: str, event_bus: EventBus) -> None:
         self._media_player_name = f'{self._INTERFACE}.{app_name}'
-        self._player = MprisPlayer(self._INTERFACE, radio, event_bus)
+        self._player = MprisPlayer(self._INTERFACE, event_bus)
 
     def __del__(self) -> None:
         self._unpublish()

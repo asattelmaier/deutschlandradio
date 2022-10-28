@@ -1,9 +1,9 @@
 from src.event_bus import EventBus
-from .channel import Channel
 from .audio_player import AudioPlayer
+from .channel import Channel
 from .channel_order_map import ChannelOrderMap
-from .events import Stop, Play
-from .subscriptions import OnPlay, OnStop
+from .events import Stop, Play, Toggle, Next, Previous
+from .subscriptions import OnPlay, OnStop, OnToggle, OnNext, OnPrevious
 
 
 class Radio:
@@ -18,25 +18,25 @@ class Radio:
         radio = Radio(audio_player, event_bus)
 
         radio._set_channel(current_channel)
-
         event_bus.subscribe(OnPlay(radio._on_play))
         event_bus.subscribe(OnStop(radio._on_stop))
+        event_bus.subscribe(OnToggle(radio._on_toggle))
+        event_bus.subscribe(OnNext(radio._on_next))
+        event_bus.subscribe(OnPrevious(radio._on_previous))
 
         return radio
 
-    @property
-    def is_playing(self) -> bool:
-        return self._audio_player.is_playing
+    def _on_next(self, _: Next) -> None:
+        self._play(ChannelOrderMap.next(self._current_channel))
 
-    @property
-    def current_channel(self) -> Channel:
-        return self._current_channel
+    def _on_previous(self, _: Previous) -> None:
+        self._play(ChannelOrderMap.previous(self._current_channel))
 
-    def next(self):
-        self._event_bus.publish(Play(ChannelOrderMap.next(self.current_channel)))
+    def _on_toggle(self, _: Toggle) -> None:
+        if self._audio_player.is_playing:
+            return self._stop(self._current_channel)
 
-    def previous(self):
-        self._event_bus.publish(Play(ChannelOrderMap.previous(self.current_channel)))
+        self._play(self._current_channel)
 
     def _on_play(self, event: Play) -> None:
         if event.channel.value == self._current_channel.value:
@@ -44,9 +44,15 @@ class Radio:
 
         self._change_channel(event.channel)
 
-    def _on_stop(self, event: Stop):
+    def _on_stop(self, event: Stop) -> None:
         if event.channel.value == self._current_channel.value:
             self._audio_player.stop()
+
+    def _play(self, channel: Channel) -> None:
+        self._event_bus.publish(Play(channel))
+
+    def _stop(self, channel: Channel) -> None:
+        self._event_bus.publish(Stop(channel))
 
     def _set_channel(self, channel: Channel) -> None:
         self._current_channel = channel

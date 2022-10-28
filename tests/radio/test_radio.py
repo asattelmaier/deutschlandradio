@@ -1,8 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from src.radio import Radio, Stop, Play
-from tests.mocks.event_bus_mock import EventBusMock
+from src.radio import Radio
 
 
 class TestRadio(unittest.TestCase):

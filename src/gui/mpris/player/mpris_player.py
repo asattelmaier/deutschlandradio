@@ -1,7 +1,8 @@
-from pydbus.generic import signal
 from gi.repository.GLib import Variant
+from pydbus.generic import signal
+
 from src.event_bus import EventBus
-from src.radio import OnPlay, OnStop, Play, Stop, Radio, Channel
+from src.radio import OnPlay, OnStop, Play, Stop, Channel, Toggle, Next, Previous
 from .playback_status import PlaybackStatus
 from .title_map import TitleMap
 
@@ -38,26 +39,22 @@ class MprisPlayer:
     PropertiesChanged = signal()
     Metadata = {'xesam:title': Variant('s', 'Rundfunk'), 'xesam:artist': Variant('as', [' '])}
 
-    def __init__(self, main_interface: str, radio: Radio, event_bus: EventBus) -> None:
+    def __init__(self, main_interface: str, event_bus: EventBus) -> None:
         self._interface: str = f'{main_interface}.Player'
         self._event_bus = event_bus
-        self._radio = radio
 
         event_bus.subscribe(OnPlay(self._on_play))
         # TODO: Rename Event to OnPause
         event_bus.subscribe(OnStop(self._on_pause))
 
     def Next(self):
-        self._radio.next()
+        self._event_bus.publish(Next())
 
     def Previous(self):
-        self._radio.previous()
+        self._event_bus.publish(Previous())
 
     def PlayPause(self) -> None:
-        if self._radio.is_playing:
-            return self._event_bus.publish(Stop(self._radio.current_channel))
-
-        self._event_bus.publish(Play(self._radio.current_channel))
+        self._event_bus.publish(Toggle())
 
     def _on_play(self, event: Play) -> None:
         self._update_playback_status(PlaybackStatus.PLAYING)

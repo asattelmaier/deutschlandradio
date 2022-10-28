@@ -1,30 +1,25 @@
-import gi
-
+from app import NAME, ICON, CATEGORY
+from event_bus import EventBus
+from g_object import GStreamer, GimpToolkit, AppIndicator
+from gui import AppMenuFactory, MenuBuilder, MenuHandler, MprisMediaPlayer
 from radio import Radio, Channel, AudioPlayer
-from gui import AppMenuFactory, MenuBuilder
-
-gi.require_version('Gtk', '3.0')
-gi.require_version('Gst', '1.0')
-gi.require_version('AppIndicator3', '0.1')
-
-from gi.repository import Gtk as GimpToolkit
-from gi.repository import AppIndicator3 as AppIndicator
-from gi.repository import Gst as GStreamer
 
 
-def main():
+def main() -> None:
+    current_channel = Channel.DEUTSCHLANDFUNK
+    event_bus = EventBus()
     audio_player = AudioPlayer.create(GStreamer)
-    radio = Radio.create(audio_player, Channel.DEUTSCHLANDFUNK)
-    menu_builder = MenuBuilder.create(GimpToolkit)
-    app_menu_factory = AppMenuFactory(menu_builder, radio, Channel, GimpToolkit.main_quit)
-    indicator = AppIndicator.Indicator.new(
-        'rundfunk_app_indicator_id',
-        'gtk-media-play',
-        AppIndicator.IndicatorCategory.APPLICATION_STATUS
-    )
+    menu_handler = MenuHandler.create(event_bus, GimpToolkit.main_quit)
+    menu_builder = MenuBuilder.create(GimpToolkit, menu_handler)
+    app_menu_factory = AppMenuFactory(menu_builder, Channel)
+    indicator = AppIndicator.Indicator.new(NAME, ICON, CATEGORY)
+    mpris_media_player = MprisMediaPlayer(NAME, event_bus)
 
+    Radio.create(audio_player, event_bus, current_channel)
+    mpris_media_player.publish()
     indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
     indicator.set_menu(app_menu_factory.create())
+
     GimpToolkit.main()
 
 

@@ -1,5 +1,9 @@
+from src.g_object import GStreamer, State
+from .playbin import Playbin
+
+
 class AudioPlayer:
-    def __init__(self, player, player_state):
+    def __init__(self, player: Playbin, player_state: State):
         self._player = player
         self._player_state = player_state
 
@@ -11,16 +15,16 @@ class AudioPlayer:
         return AudioPlayer(player, g_streamer.State)
 
     @property
-    def is_playing(self):
+    def is_playing(self) -> bool:
         current_state = self._player.current_state
 
-        return current_state is self._player_state.PLAYING
+        return current_state is self._player_state.PLAYING or current_state is self._player_state.READY
 
-    def set_uri(self, uri):
+    def set_uri(self, uri) -> None:
         self._player.set_property('uri', uri)
 
-    def play(self):
+    def play(self) -> None:
         self._player.set_state(self._player_state.PLAYING)
 
-    def stop(self):
+    def stop(self) -> None:
         self._player.set_state(self._player_state.NULL)

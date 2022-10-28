@@ -1,19 +1,25 @@
+from src.g_object import GimpToolkit, Menu
+from .menu_handler import MenuHandler
+
+
 class MenuBuilder:
-    def __init__(self, gimp_toolkit, menu):
+    def __init__(self, gimp_toolkit, menu: Menu, menu_handler: MenuHandler):
         self._gimp_toolkit = gimp_toolkit
         self._menu = menu
+        self._menu_handler = menu_handler
 
     @staticmethod
-    def create(gimp_toolkit):
+    def create(gimp_toolkit, menu_handler: MenuHandler):
         menu = gimp_toolkit.Menu()
 
-        return MenuBuilder(gimp_toolkit, menu)
+        return MenuBuilder(gimp_toolkit, menu, menu_handler)
 
-    def add_item(self, label, handler):
+    def add_item(self, label):
         item = self._gimp_toolkit.CheckMenuItem(label)
 
         item.set_draw_as_radio(True)
-        item.connect('activate', self._create_item_handler(handler))
+        item.connect('activate', self._menu_handler.item_handler)
+        self._menu_handler.add_item(item)
         self._add_to_menu(item)
 
         return self
@@ -30,32 +36,5 @@ class MenuBuilder:
 
         return self._menu
 
-    @property
-    def _menu_items(self):
-        return filter(self._is_menu_item, self._menu)
-
-    @staticmethod
-    def _disable_items(items):
-        for item in items:
-            if item.get_active():
-                item.set_active(False)
-
-    def _is_menu_item(self, item):
-        return isinstance(item, self._gimp_toolkit.CheckMenuItem)
-
     def _add_to_menu(self, item):
         self._menu.append(item)
-
-    def _create_item_handler(self, handler):
-        return lambda item: self._item_handler(item, handler)
-
-    def _item_handler(self, item, handler):
-        # TODO: Move this logic to make it simple testable
-        if item.get_active():
-            items = self._filter_menu_item(item)
-            MenuBuilder._disable_items(items)
-
-        handler()
-
-    def _filter_menu_item(self, item_to_filter):
-        return filter(lambda item: item is not item_to_filter, self._menu_items)

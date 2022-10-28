@@ -1,6 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, call, ANY
-
+from unittest.mock import MagicMock, call
 from src.gui import AppMenuFactory
 
 
@@ -10,15 +9,13 @@ class TestAppMenuFactory(unittest.TestCase):
         Test that the Menu will be created.
         """
         menu_builder = MagicMock()
-        radio = MagicMock()
         channel = MagicMock()
-        quit_handler = MagicMock()
         menu = MagicMock()
 
         menu_builder.add_item.return_value = menu_builder
         menu_builder.add_separator.return_value = menu_builder
         menu_builder.build.return_value = menu
-        app_menu_factory = AppMenuFactory(menu_builder, radio, channel, quit_handler)
+        app_menu_factory = AppMenuFactory(menu_builder, channel)
 
         self.assertIs(app_menu_factory.create(), menu)
 
@@ -28,19 +25,17 @@ class TestAppMenuFactory(unittest.TestCase):
         """
 
         menu_builder = MagicMock()
-        radio = MagicMock()
         channel = MagicMock()
-        quit_handler = MagicMock()
 
         menu_builder.add_item.return_value = menu_builder
         menu_builder.add_separator.return_value = menu_builder
-        app_menu_factory = AppMenuFactory(menu_builder, radio, channel, quit_handler)
+        app_menu_factory = AppMenuFactory(menu_builder, channel)
         app_menu_factory.create()
 
         menu_builder.add_item.assert_has_calls([
-            call('Deutschlandfunk', ANY),
-            call('Deutschlandfunk Kultur', ANY),
-            call('Deutschlandfunk Nova', ANY),
-            call('Dokumente und Debatten', ANY),
-            call('Schließen', ANY)
+            call('Deutschlandfunk'),
+            call('Deutschlandfunk Kultur'),
+            call('Deutschlandfunk Nova'),
+            call('Dokumente und Debatten'),
+            call('Schließen')
         ])

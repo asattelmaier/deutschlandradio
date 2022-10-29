@@ -52,7 +52,7 @@ class TestAudioPlayer(unittest.TestCase):
         g_streamer.State.NULL = "NULL"
         g_streamer.ElementFactory.make.return_value = player
         audio_player = AudioPlayer.create(g_streamer)
-        audio_player.stop()
+        audio_player.pause()
 
         player.set_state.assert_called_once_with('NULL')
 

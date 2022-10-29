@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from src.gui import MenuHandler
-from src.radio import Stop, Play
+from src.radio import Pause, Play
 from tests.mocks.event_bus_mock import EventBusMock
 
 
@@ -36,7 +36,7 @@ class TestMenuHandler(unittest.TestCase):
         item.get_active.return_value = False
         menu_handler.add_item(item)
         menu_handler.item_handler(item)
-        event = event_bus.get_event(Stop)
+        event = event_bus.get_event(Pause)
 
         print(event_bus._events)
-        self.assertIsInstance(event, Stop)
+        self.assertIsInstance(event, Pause)

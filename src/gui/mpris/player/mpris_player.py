@@ -2,7 +2,7 @@ from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from src.event_bus import EventBus
-from src.radio import OnPlay, OnStop, Play, Stop, Channel, Toggle, Next, Previous
+from src.radio import OnPlay, OnPause, Play, Pause, Channel, Toggle, Next, Previous
 from .playback_status import PlaybackStatus
 from .title_map import TitleMap
 
@@ -44,8 +44,7 @@ class MprisPlayer:
         self._event_bus = event_bus
 
         event_bus.subscribe(OnPlay(self._on_play))
-        # TODO: Rename Event to OnPause
-        event_bus.subscribe(OnStop(self._on_pause))
+        event_bus.subscribe(OnPause(self._on_pause))
 
     def Next(self):
         self._event_bus.publish(Next())
@@ -60,7 +59,7 @@ class MprisPlayer:
         self._update_playback_status(PlaybackStatus.PLAYING)
         self._update_meta_data(event.channel)
 
-    def _on_pause(self, event: Stop) -> None:
+    def _on_pause(self, event: Pause) -> None:
         self._update_playback_status(PlaybackStatus.PAUSED)
         self._update_meta_data(event.channel)
 

@@ -1,4 +1,4 @@
 from .factory import create
 from .channel import Channel
-from .events import Play, Stop, Toggle, Next, Previous
-from .subscriptions import OnPlay, OnStop
+from .events import Play, Pause, Toggle, Next, Previous
+from .subscriptions import OnPlay, OnPause

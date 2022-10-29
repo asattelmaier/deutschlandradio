@@ -2,7 +2,7 @@ from typing import Callable
 
 from src.event_bus import EventBus
 from src.gui.menu.menu_item import MenuItemLabel, MenuItem, MenuItemLabelChannelMap
-from src.radio import Channel, OnPlay, Play, OnStop, Stop
+from src.radio import Channel, OnPlay, Play, OnPause, Pause
 from ..g_object import CheckMenuItem
 
 
@@ -17,7 +17,7 @@ class MenuHandler:
         menu_handler = MenuHandler(event_bus, quit_handler)
 
         event_bus.subscribe(OnPlay(menu_handler._activate_item))
-        event_bus.subscribe(OnStop(menu_handler._disable_item))
+        event_bus.subscribe(OnPause(menu_handler._disable_item))
 
         return menu_handler
 
@@ -59,7 +59,7 @@ class MenuHandler:
             return item.update_done()
 
         if not item.is_active:
-            return self._event_bus.publish(Stop(item.channel))
+            return self._event_bus.publish(Pause(item.channel))
 
         return self._event_bus.publish(Play(item.channel))
 
@@ -75,7 +75,7 @@ class MenuHandler:
         items = self._filter_item(item)
         MenuHandler._disable_items(items)
 
-    def _disable_item(self, event: Stop) -> None:
+    def _disable_item(self, event: Pause) -> None:
         item = self._get_item_by_channel(event.channel)
 
         if item.is_active:

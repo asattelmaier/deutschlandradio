@@ -26,5 +26,5 @@ class AudioPlayer:
     def play(self) -> None:
         self._player.set_state(self._player_state.PLAYING)
 
-    def stop(self) -> None:
+    def pause(self) -> None:
         self._player.set_state(self._player_state.NULL)

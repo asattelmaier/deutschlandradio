@@ -1,5 +1,5 @@
 from .play import Play
-from .stop import Stop
+from .pause import Pause
 from .toggle import Toggle
 from .previous import Previous
 from .next import Next

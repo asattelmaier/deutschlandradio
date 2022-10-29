@@ -1,4 +1,4 @@
-from src.g_object import GStreamer, State
+from ..g_object import GStreamer, State
 from .playbin import Playbin
 
 

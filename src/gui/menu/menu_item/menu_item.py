@@ -1,5 +1,5 @@
-from src.g_object import CheckMenuItem
 from src.radio import Channel
+from ...g_object import CheckMenuItem
 
 
 class MenuItem:

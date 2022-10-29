@@ -1,5 +1,5 @@
-from src.g_object import GimpToolkit, Menu
 from .menu_handler import MenuHandler
+from ..g_object import Menu
 
 
 class MenuBuilder:

@@ -1,8 +1,9 @@
 from typing import Callable
+
 from src.event_bus import EventBus
+from src.gui.menu.menu_item import MenuItemLabel, MenuItem, MenuItemLabelChannelMap
 from src.radio import Channel, OnPlay, Play, OnStop, Stop
-from src.g_object import CheckMenuItem
-from .menu_item import MenuItemLabel, MenuItem, MenuItemLabelChannelMap
+from ..g_object import CheckMenuItem
 
 
 class MenuHandler:

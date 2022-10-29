@@ -1,5 +1,5 @@
 from src.event_bus import Event
-from src.radio import Channel
+from ..radio import Channel
 
 
 class Stop(Event):

@@ -1,4 +1,4 @@
-from .menu_item import MenuItemLabel
+from src.gui.menu.menu_item import MenuItemLabel
 
 
 class AppMenuFactory:

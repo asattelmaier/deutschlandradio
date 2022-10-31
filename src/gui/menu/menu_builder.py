@@ -1,21 +1,21 @@
 from .menu_handler import MenuHandler
-from ..g_object import Menu
+from ..g_object import Menu, GimpToolkit, CheckMenuItem
 
 
 class MenuBuilder:
-    def __init__(self, gimp_toolkit, menu: Menu, menu_handler: MenuHandler):
+    def __init__(self, gimp_toolkit: GimpToolkit, menu: Menu, menu_handler: MenuHandler):
         self._gimp_toolkit = gimp_toolkit
         self._menu = menu
         self._menu_handler = menu_handler
 
     @staticmethod
-    def create(gimp_toolkit, menu_handler: MenuHandler):
+    def create(gimp_toolkit: GimpToolkit, menu_handler: MenuHandler) -> 'MenuBuilder':
         menu = gimp_toolkit.Menu()
 
         return MenuBuilder(gimp_toolkit, menu, menu_handler)
 
-    def add_item(self, label):
-        item = self._gimp_toolkit.CheckMenuItem(label)
+    def add_item(self, label: str):
+        item: CheckMenuItem = self._gimp_toolkit.CheckMenuItem(label)
 
         item.set_draw_as_radio(True)
         item.connect('activate', self._menu_handler.item_handler)

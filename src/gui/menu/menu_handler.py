@@ -13,7 +13,7 @@ class MenuHandler:
         self._quit_handler: Callable = quit_handler
 
     @staticmethod
-    def create(event_bus: EventBus, quit_handler: Callable):
+    def create(event_bus: EventBus, quit_handler: Callable) -> 'MenuHandler':
         menu_handler = MenuHandler(event_bus, quit_handler)
 
         event_bus.subscribe(OnPlay(menu_handler._activate_item))

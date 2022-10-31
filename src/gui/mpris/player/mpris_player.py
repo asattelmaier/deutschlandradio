@@ -1,10 +1,10 @@
-from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from src.event_bus import EventBus
-from src.radio import OnPlay, OnPause, Play, Pause, Channel, Toggle, Next, Previous
+from src.radio import OnPlay, OnPause, Play, Pause, Toggle, Next, Previous, OnMetaDataUpdate, UpdateMetaData, Channel
 from .playback_status import PlaybackStatus
 from .title_map import TitleMap
+from ...g_object import Variant
 
 
 class MprisPlayer:
@@ -37,7 +37,7 @@ class MprisPlayer:
     CanGoPrevious = True
     PlaybackStatus = PlaybackStatus.STOPPED.value
     PropertiesChanged = signal()
-    Metadata = {'xesam:title': Variant('s', 'Rundfunk'), 'xesam:artist': Variant('as', [' '])}
+    _metadata = {'title': '', 'artist': 'Rundfunk'}
 
     def __init__(self, main_interface: str, event_bus: EventBus) -> None:
         self._interface: str = f'{main_interface}.Player'
@@ -45,32 +45,59 @@ class MprisPlayer:
 
         event_bus.subscribe(OnPlay(self._on_play))
         event_bus.subscribe(OnPause(self._on_pause))
+        event_bus.subscribe(OnMetaDataUpdate(self._on_meta_data_update))
 
-    def Next(self):
+    @property
+    def Metadata(self) -> dict:
+        """
+        API Documentation:
+        https://specifications.freedesktop.org/mpris-spec/2.2/Track_List_Interface.html#Mapping:Metadata_Map
+
+        :return: Metadata Map
+        """
+
+        # Title Metadata information:
+        # https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/#xesam:title
+        title = {'xesam:title': Variant('s', self._metadata['title'])}
+
+        # Artist Metadata information:
+        # https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/#xesam:artist
+        artist = {'xesam:artist': Variant('as', [self._metadata['artist']])}
+
+        return {**title, **artist}
+
+    def Next(self) -> None:
         self._event_bus.publish(Next())
+        self._update_title('')
 
-    def Previous(self):
+    def Previous(self) -> None:
         self._event_bus.publish(Previous())
+        self._update_title('')
 
     def PlayPause(self) -> None:
         self._event_bus.publish(Toggle())
 
     def _on_play(self, event: Play) -> None:
         self._update_playback_status(PlaybackStatus.PLAYING)
-        self._update_meta_data(event.channel)
+        self._update_channel(event.channel)
 
-    def _on_pause(self, event: Pause) -> None:
+    def _on_pause(self, _: Pause) -> None:
         self._update_playback_status(PlaybackStatus.PAUSED)
-        self._update_meta_data(event.channel)
+
+    def _on_meta_data_update(self, event: UpdateMetaData) -> None:
+        self._update_channel(event.channel)
+        self._update_title(event.title)
 
     def _update_playback_status(self, playback_status: PlaybackStatus) -> None:
         self._update({'PlaybackStatus': playback_status.value})
 
-    def _update_meta_data(self, channel: Channel) -> None:
-        title = Variant('s', TitleMap.get_label(channel))
-        artist = Variant('as', [' '])
+    def _update_channel(self, channel: Channel) -> None:
+        self._metadata['artist'] = TitleMap.get_label(channel)
+        self._update({'Metadata': self.Metadata})
 
-        self._update({'Metadata': {'xesam:title': title, 'xesam:artist': artist}})
+    def _update_title(self, title: str) -> None:
+        self._metadata['title'] = title
+        self._update({'Metadata': self.Metadata})
 
     def _update(self, properties: dict) -> None:
         self.PropertiesChanged(self._interface, properties, [])

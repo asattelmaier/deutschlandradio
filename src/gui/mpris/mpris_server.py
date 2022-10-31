@@ -8,7 +8,7 @@ from .player import MprisPlayer
 
 
 class MprisMediaPlayer:
-    _INTERFACE: str = "org.mpris.MediaPlayer2"
+    _INTERFACE: str = 'org.mpris.MediaPlayer2'
     _DBUS_PATH: str = '/org/mpris/MediaPlayer2'
     _publication_token: Optional[Publication] = None
 

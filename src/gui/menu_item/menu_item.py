@@ -28,8 +28,8 @@ class MenuItem:
         self._item.set_active(False)
 
     def activate(self) -> None:
-        self._item.set_active(True)
         self._is_updating = True
+        self._item.set_active(True)
 
     def update_done(self):
         self._is_updating = False

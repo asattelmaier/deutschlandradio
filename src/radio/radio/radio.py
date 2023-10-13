@@ -1,4 +1,5 @@
 from src.event_bus import EventBus
+from src.logger import Logger
 from src.radio.audio_player import AudioPlayer, OnTags, Tags
 from src.radio.radio.subscriptions import OnPlay, OnPause, OnToggle, OnNext, OnPrevious
 from .channel import Channel
@@ -7,6 +8,7 @@ from .events import Pause, Play, Toggle, Next, Previous, UpdateMetaData
 
 
 class Radio:
+    _logger: Logger = Logger('Radio')
     _current_channel: Channel
 
     def __init__(self, audio_player: AudioPlayer, event_bus: EventBus):
@@ -28,24 +30,32 @@ class Radio:
         return radio
 
     def _on_next(self, _: Next) -> None:
+        self._logger.debug("OnNext")
         self._play(ChannelOrderMap.next(self._current_channel))
 
     def _on_previous(self, _: Previous) -> None:
+        self._logger.debug("OnPrevious")
         self._play(ChannelOrderMap.previous(self._current_channel))
 
     def _on_toggle(self, _: Toggle) -> None:
+        self._logger.debug("OnToggle")
+
         if self._audio_player.is_playing:
             return self._pause(self._current_channel)
 
         self._play(self._current_channel)
 
     def _on_play(self, event: Play) -> None:
+        self._logger.debug("OnPlay - " + event.channel.name)
+
         if event.channel.value == self._current_channel.value:
             return self._audio_player.play()
 
         self._change_channel(event.channel)
 
     def _on_pause(self, event: Pause) -> None:
+        self._logger.debug("OnPause - " + event.channel.name)
+
         if event.channel.value == self._current_channel.value:
             self._audio_player.pause()
 
@@ -60,9 +70,11 @@ class Radio:
                 self._event_bus.publish(UpdateMetaData(self._current_channel, title))
 
     def _play(self, channel: Channel) -> None:
+        self._logger.debug("Play - " + channel.name)
         self._event_bus.publish(Play(channel))
 
     def _pause(self, channel: Channel) -> None:
+        self._logger.debug("Pause - " + channel.name)
         self._event_bus.publish(Pause(channel))
 
     def _set_channel(self, channel: Channel) -> None:

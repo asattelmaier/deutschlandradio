@@ -1,6 +1,8 @@
+import argparse
 import gui
 import radio
 from event_bus import EventBus
+from src.logger import Logger
 
 
 def main() -> None:
@@ -12,4 +14,10 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--log-level", help="Set the log level (DEBUG)")
+    args = parser.parse_args()
+    Logger.setup(args.log_level)
+
     main()

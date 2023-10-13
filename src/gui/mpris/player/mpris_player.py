@@ -1,6 +1,7 @@
 from pydbus.generic import signal
 
 from src.event_bus import EventBus
+from src.logger import Logger
 from src.radio import OnPlay, OnPause, Play, Pause, Toggle, Next, Previous, OnMetaDataUpdate, UpdateMetaData, Channel
 from .playback_status import PlaybackStatus
 from .title_map import TitleMap
@@ -8,6 +9,8 @@ from ...g_object import Variant
 
 
 class MprisPlayer:
+    _logger: Logger = Logger('MprisPlayer')
+
     """
     API Documentation:
     https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html
@@ -67,24 +70,31 @@ class MprisPlayer:
         return {**title, **artist}
 
     def Next(self) -> None:
+        self._logger.debug("Next")
         self._event_bus.publish(Next())
         self._update_title('')
 
     def Previous(self) -> None:
+        self._logger.debug("Previous")
         self._event_bus.publish(Previous())
         self._update_title('')
 
     def PlayPause(self) -> None:
+        self._logger.debug("PlayPause")
         self._event_bus.publish(Toggle())
 
     def _on_play(self, event: Play) -> None:
+        self._logger.debug("OnPlay - " + event.channel.name)
         self._update_playback_status(PlaybackStatus.PLAYING)
         self._update_channel(event.channel)
 
-    def _on_pause(self, _: Pause) -> None:
+    def _on_pause(self, event: Pause) -> None:
+        self._logger.debug("OnPause - " + event.channel.name)
         self._update_playback_status(PlaybackStatus.PAUSED)
 
     def _on_meta_data_update(self, event: UpdateMetaData) -> None:
+        # FIXME: The meta data is not displayed completely, only the last metadata received is displayed
+        self._logger.debug("OnMetaDataUpdate - " + event.channel.name + ' - ' + event.title)
         self._update_channel(event.channel)
         self._update_title(event.title)
 

@@ -1,6 +1,6 @@
 name: rundfunk
 base: core18
-version: '2.1.0'
+version: '2.1.1'
 summary: Unofficial Deutschlandradio GNU/Linux client
 description: |
   Unofficial Deutschlandradio GNU/Linux client for the Deutschlandradio channels, Deutschlandfunk, Deutschlandfunk
@@ -18,6 +18,8 @@ apps:
     plugs:
       - audio-playback
       - network
+    slots:
+      - mpris
 
 parts:
   copy-src:

@@ -1,4 +1,4 @@
-from gi.repository.Gst import State
+from ..g_object import State, GstBus
 
 
 class Playbin:
@@ -14,4 +14,7 @@ class Playbin:
         pass
 
     def set_property(self, name: str, value: str) -> None:
+        pass
+
+    def get_bus(self) -> GstBus:
         pass

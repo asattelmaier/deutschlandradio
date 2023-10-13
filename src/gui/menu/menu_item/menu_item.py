@@ -5,7 +5,7 @@ from ...g_object import CheckMenuItem
 class MenuItem:
     def __init__(self, item: CheckMenuItem, channel: Channel):
         self._item = item
-        self._is_updating = False
+        self._is_updated_by_click = True
         self._channel = channel
 
     @property
@@ -21,15 +21,16 @@ class MenuItem:
         return self._item.get_label()
 
     @property
-    def is_updating(self) -> bool:
-        return self._is_updating
+    def is_updated_by_click(self) -> bool:
+        return self._is_updated_by_click
 
     def disable(self) -> None:
+        self._is_updated_by_click = False
         self._item.set_active(False)
 
     def activate(self) -> None:
-        self._is_updating = True
+        self._is_updated_by_click = False
         self._item.set_active(True)
 
     def update_done(self):
-        self._is_updating = False
+        self._is_updated_by_click = True

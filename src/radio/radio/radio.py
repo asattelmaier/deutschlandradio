@@ -67,7 +67,18 @@ class Radio:
             # https://gstreamer.freedesktop.org/documentation/gstreamer/gsttaglist.html?gi-language=c#GST_TAG_TITLE
             if tag == "title":
                 title = event.tagList.get_string(tag)[1]
-                self._event_bus.publish(UpdateMetaData(self._current_channel, title))
+                self._publish_meta_data_update(title)
+
+    def _publish_meta_data_update(self, title: str = None) -> None:
+        if not isinstance(title, str):
+            return
+
+        # The title often ends with a comma, but we
+        # do not want to show this to the user.
+        if title.endswith(","):
+            return self._event_bus.publish(UpdateMetaData(self._current_channel, title[:-1]))
+
+        self._event_bus.publish(UpdateMetaData(self._current_channel, title))
 
     def _play(self, channel: Channel) -> None:
         self._logger.debug("Play - " + channel.name)

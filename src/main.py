@@ -17,6 +17,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--log-level", help="Set the log level (DEBUG)")
+    parser.add_argument("--version", action="version", version="rundfunk version 2.1.0")
     args = parser.parse_args()
     Logger.setup(args.log_level)
 

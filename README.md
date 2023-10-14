@@ -6,7 +6,7 @@ Unofficial Deutschlandradio GNU/Linux client for the Deutschlandradio channels, 
 Deutschlandfunk Nova and Dokumente und Debatten.
 
 <p align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1nzeh7bsd05_1NNAc3HnY0J8tcmLKNTrl" alt="Rundfunk App">
+  <img src="https://drive.google.com/uc?export=view&id=15w5cfdpoHcn0kl6izspzTgR-6ywPxkbO" alt="Rundfunk App">
 </p>
 
 ## Prerequirement
